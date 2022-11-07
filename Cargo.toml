@@ -1,9 +1,12 @@
 [package]
 name = "hx1230"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[features]
+# Enables rendering into display buffer using `embedded_graphics` library
+embedded_graphics = ["dep:embedded-graphics-core"]
 
 [dependencies]
 embedded-hal = "0.2.6"
+embedded-graphics-core = { version = "0.3.3", optional = true }
