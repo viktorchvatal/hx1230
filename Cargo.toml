@@ -4,6 +4,7 @@ version = "0.1.1"
 edition = "2021"
 
 [features]
+default = ["embedded_graphics"]
 # Enables rendering into display buffer using `embedded_graphics` library
 embedded_graphics = ["dep:embedded-graphics-core"]
 

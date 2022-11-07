@@ -1,6 +1,7 @@
 use embedded_graphics_core::{prelude::*, pixelcolor::BinaryColor, Pixel};
+use crate::{buffer::{ArrayDisplayBuffer, W, H}, DisplayBuffer};
 
-impl<const W: usize, const H: usize> DrawTarget for ArrayDisplayBuffer<W, H> {
+impl DrawTarget for ArrayDisplayBuffer {
     type Color = BinaryColor;
 
     type Error = core::convert::Infallible;
@@ -13,9 +14,11 @@ impl<const W: usize, const H: usize> DrawTarget for ArrayDisplayBuffer<W, H> {
                 let column = coord.x as usize;
                 let shift = (coord.y as usize) % 8;
 
-                self.pixels[line][column] = self.pixels[line][column]
-                    & (!(1 << shift))
-                    | ((color.is_on() as u8) << shift);
+                if let Some(pixels) = self.get_line_mut(line) {
+                    pixels[column] = pixels[column]
+                        & (!(1 << shift))
+                        | ((color.is_on() as u8) << shift);
+                }
             }
         }
 
@@ -23,7 +26,7 @@ impl<const W: usize, const H: usize> DrawTarget for ArrayDisplayBuffer<W, H> {
     }
 }
 
-impl<const W: usize, const H: usize> OriginDimensions for ArrayDisplayBuffer<W, H> {
+impl OriginDimensions for ArrayDisplayBuffer {
     fn size(&self) -> Size {
         Size::new(W as u32, (H*8) as u32)
     }

@@ -1,10 +1,10 @@
 use crate::interface::DisplayBuffer;
 
 /// Display width in pixels
-const W: usize = 96;
+pub const W: usize = 96;
 
 /// Display width in octets
-const H: usize = 9;
+pub const H: usize = 9;
 
 /// Fixed size display frame buffer for HX1230 display,
 pub struct ArrayDisplayBuffer {
