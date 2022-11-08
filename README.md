@@ -36,9 +36,9 @@ Initialize the display
 
 ```rust
 let mut driver = SpiDriver::new(&mut spi, &mut display_cs);
-display.commands(&[command::reset()])?;
+display.send_commands(&[command::reset()])?;
 delay.delay_us(100_u16);
-display.commands(init_sequence())?;
+display.send_commands(init_sequence())?;
 ```
 
 Create the frame buffer
@@ -61,7 +61,7 @@ Send data to display
 
 ```rust
 let mut driver = SpiDriver::new(&mut spi, &mut display_cs);
-driver.buffer(&frame_buffer).unwrap();
+driver.send_buffer(&frame_buffer).unwrap();
 ```
 
 Full example code: [examples/graphics.rs](examples/graphics.rs)
@@ -86,3 +86,8 @@ Licensed under either of
 - MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
 
 at your option.
+
+## Resources
+
+Python implementation of HX1230 display driver, including useful wiring information
+and even product datasheets: https://github.com/mcauser/micropython-hx1230

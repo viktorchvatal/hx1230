@@ -1,3 +1,5 @@
+//! Simple HX1230 display driver to be used in embedded environment
+
 #![no_std]
 #![deny(unsafe_code)]
 

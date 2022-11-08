@@ -1,3 +1,5 @@
+//! Module consisting of functions that generate commands to be transmitted
+//! to the display.
 
 /// Display software reset
 pub const fn reset() -> u8 {
@@ -69,8 +71,8 @@ pub const fn set_contrast(contrast: u8) -> u8 {
     0x80 | (0b00011111 & contrast)
 }
 
-/// Set display line (0 - 63)
-pub const fn set_line(line: u8) -> u8 {
+/// Set start line (0 - 63)
+pub const fn set_start_line(line: u8) -> u8 {
     0x40 | (0b00111111 & line)
 }
 
