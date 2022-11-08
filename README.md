@@ -1,6 +1,7 @@
 # HX1230 Display driver
 
-Early version of HX1230 display driver running on `embedded-hal`
+Early version of HX1230 display driver running on `embedded-hal` optionally
+integrated with `embedded_graphics` library
 
 [![HX1320 display module](doc/display.jpg?raw=true)](examples/graphics.rs)
 
@@ -29,7 +30,41 @@ To run example on such MCU, run
 cargo run --example graphics --release
 ```
 
-Example code: [examples/graphics.rs](examples/graphics.rs)
+### Usage
+
+Initialize the display
+
+```rust
+let mut driver = SpiDriver::new(&mut spi, &mut display_cs);
+display.commands(&[command::reset()])?;
+delay.delay_us(100_u16);
+display.commands(init_sequence())?;
+```
+
+Create the frame buffer
+
+```rust
+let mut frame_buffer: ArrayDisplayBuffer = ArrayDisplayBuffer::new();
+```
+
+Draw primitives using `embedded_graphics` into buffer
+
+```rust
+let text_style = MonoTextStyle::new(&FONT_6X13, BinaryColor::On);
+
+Text::new("example", Point::new(0, 12), text_style)
+    .draw(&mut frame_buffer)
+    .unwrap();
+```
+
+Send data to display
+
+```rust
+let mut driver = SpiDriver::new(&mut spi, &mut display_cs);
+driver.buffer(&frame_buffer).unwrap();
+```
+
+Full example code: [examples/graphics.rs](examples/graphics.rs)
 
 Note:
  - openocd must be running to successfully run the example
