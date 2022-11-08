@@ -79,14 +79,14 @@ pub const fn set_page(page: u8) -> u8 {
     0xB0 | (0b00001111 & page)
 }
 
-/// Set column low 3 bits (0 - 63) - x coordinate
+/// Set column low 4 bits (0 - 63) - x coordinate
 pub const fn set_column_low(column: u8) -> u8 {
     0b00001111 & column
 }
 
-/// Set column low 3 bits (0 - 63) - x coordinate
+/// Set column high 3 bits (0 - 63) - x coordinate
 pub const fn set_column_high(column: u8) -> u8 {
-    0b00010000 | (column & 0b00000111)
+    0b00010000 | ((column >> 4) & 0b00000111)
 }
 
 /// Sequence of commands to fully initialize the display
@@ -114,4 +114,15 @@ pub const fn set_position(column: u8, row: u8) -> [u8; 3] {
         set_column_high(column),
         set_page(row),
     ]
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_set_position() {
+        let commands = set_position(13, 7);
+        assert_eq!(commands, [0b00001101, 0b00010000, 0b10110111]);
+    }
 }

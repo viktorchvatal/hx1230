@@ -1,6 +1,6 @@
 [package]
 name = "hx1230"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2021"
 
 [features]
@@ -11,3 +11,22 @@ embedded_graphics = ["dep:embedded-graphics-core"]
 [dependencies]
 embedded-hal = "0.2.6"
 embedded-graphics-core = { version = "0.3.3", optional = true }
+
+# Dependencies for unit tests:
+
+[dev-dependencies]
+
+# Dependencies for examples:
+
+panic-halt = "0.2.0"
+embedded-graphics = "0.7.1"
+cortex-m = "0.7"
+cortex-m-rt = "0.7"
+
+[dev-dependencies.stm32f1xx-hal]
+version = "0.9.0"
+features = ["rt", "stm32f103", "medium"]
+
+[dev-dependencies.arrayvec]
+version = "0.7.2"
+default-features = false

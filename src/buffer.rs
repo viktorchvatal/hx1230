@@ -37,3 +37,22 @@ impl DisplayBuffer for ArrayDisplayBuffer {
         H
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn get_existing_line() {
+        let buffer = ArrayDisplayBuffer::new();
+        let line = buffer.get_line(8);
+        assert!(&line.is_some());
+        assert_eq!(line.unwrap().len(), 96);
+    }
+
+    #[test]
+    fn get_line_out_of_range() {
+        let buffer = ArrayDisplayBuffer::new();
+        assert!(&buffer.get_line(9).is_none());
+    }
+}
