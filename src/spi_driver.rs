@@ -63,11 +63,11 @@ where SPI: spi::Write<u8>, CS: OutputPin {
 
 impl<'a, SPI, CS> DisplayDriver for SpiDriver<'a, SPI, CS>
 where SPI: spi::Write<u8>, CS: OutputPin {
-    fn data(&mut self, data: &[u8]) -> Result<(),()> {
+    fn send_data(&mut self, data: &[u8]) -> Result<(),()> {
         self.transmit(data, false)
     }
 
-    fn commands(&mut self, commands: &[u8]) -> Result<(),()> {
+    fn send_commands(&mut self, commands: &[u8]) -> Result<(),()> {
         self.transmit(commands, true)
     }
 }

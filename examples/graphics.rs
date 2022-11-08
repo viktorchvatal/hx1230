@@ -73,7 +73,7 @@ fn main() -> ! {
             .unwrap();
 
         let mut driver = SpiDriver::new(&mut spi, &mut display_cs);
-        driver.buffer(&frame_buffer).unwrap();
+        driver.send_buffer(&frame_buffer).unwrap();
 
         diameter = diameter + 1;
 
@@ -89,9 +89,9 @@ pub fn init_display<SPI, CS, D>(
 ) -> Result<(), ()>
 where SPI: spi::Write<u8>, CS: OutputPin, D: DelayUs<u16> {
     let mut display = SpiDriver::new(spi, cs);
-    display.commands(&[command::reset()])?;
+    display.send_commands(&[command::reset()])?;
     delay.delay_us(100_u16);
-    display.commands(init_sequence())?;
+    display.send_commands(init_sequence())?;
     Ok(())
 }
 

@@ -7,23 +7,23 @@ use crate::command::set_position;
 /// SPI interface or more advanced implementation using a DMA channel.
 pub trait DisplayDriver {
     /// Send data to display
-    fn data(&mut self, data: &[u8]) -> Result<(), ()>;
+    fn send_data(&mut self, data: &[u8]) -> Result<(), ()>;
 
     /// Send multiple commands to display
-    fn commands(&mut self, commands: &[u8]) -> Result<(), ()>;
+    fn send_commands(&mut self, commands: &[u8]) -> Result<(), ()>;
 
     /// Send a single command to display
-    fn command(&mut self, command: u8) -> Result<(), ()> {
-        self.commands(&[command])
+    fn send_command(&mut self, command: u8) -> Result<(), ()> {
+        self.send_commands(&[command])
     }
 
     /// Send buffer of data
-    fn buffer(&mut self, buffer: &dyn DisplayBuffer) -> Result<(), ()> {
-        self.commands(&set_position(0, 0))?;
+    fn send_buffer(&mut self, buffer: &dyn DisplayBuffer) -> Result<(), ()> {
+        self.send_commands(&set_position(0, 0))?;
 
         for line_id in 0..buffer.line_count() {
             if let Some(ref line) = buffer.get_line(line_id) {
-                self.data(line)?;
+                self.send_data(line)?;
             }
         }
 
