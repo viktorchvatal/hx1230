@@ -1,7 +1,18 @@
 [package]
 name = "hx1230"
-version = "0.3.0"
+version = "0.3.1"
 edition = "2021"
+readme = "README.md"
+repository = "https://github.com/viktorchvatal/hx1230"
+keywords = ["no-std", "embedded"]
+license = "MIT OR Apache-2.0"
+categories = ["embedded", "no-std"]
+description = "Driver for the HX1230 display"
+authors = ["Viktor Chvátal"]
+exclude = [
+    ".gitignore",
+    "doc/display.jpg"
+]
 
 [features]
 default = ["embedded_graphics"]
@@ -12,12 +23,8 @@ embedded_graphics = ["dep:embedded-graphics-core"]
 embedded-hal = "0.2.6"
 embedded-graphics-core = { version = "0.3.3", optional = true }
 
-# Dependencies for unit tests:
-
-[dev-dependencies]
-
 # Dependencies for examples:
-
+[dev-dependencies]
 panic-halt = "0.2.0"
 embedded-graphics = "0.7.1"
 cortex-m = "0.7"
