@@ -35,19 +35,17 @@ cargo run --example graphics --release
 Initialize the display
 
 ```rust
-let mut driver = SpiDriver::new(&mut spi, &mut display_cs);
-display.send_commands(&[command::reset()])?;
-delay.delay_us(100_u16);
-display.send_commands(init_sequence())?;
-```
+// Create display driver using the provided SPI interface and chip select pin
+let mut display = SpiDriver::new(&mut spi, &mut display_cs);
 
-Create the frame buffer
+// Send the initialization sequence
+display.initialize(&mut delay).unwrap();
 
-```rust
+// Create frame buffer for HX1230 display
 let mut frame_buffer: ArrayDisplayBuffer = ArrayDisplayBuffer::new();
 ```
 
-Draw primitives using `embedded_graphics` into buffer
+Do some drawing using `embedded_graphics` into buffer
 
 ```rust
 let text_style = MonoTextStyle::new(&FONT_6X13, BinaryColor::On);
@@ -60,8 +58,8 @@ Text::new("example", Point::new(0, 12), text_style)
 Send data to display
 
 ```rust
-let mut driver = SpiDriver::new(&mut spi, &mut display_cs);
-driver.send_buffer(&frame_buffer).unwrap();
+// Send display buffer data to display
+display.send_buffer(&frame_buffer).unwrap();
 ```
 
 Full example code: [examples/graphics.rs](examples/graphics.rs)

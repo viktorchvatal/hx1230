@@ -1,8 +1,6 @@
 use core::cmp::min;
-
-use embedded_hal::{blocking::spi, digital::v2::OutputPin};
-
-use crate::{DisplayDriver};
+use embedded_hal::{blocking::{spi, delay::{DelayUs, DelayMs}}, digital::v2::OutputPin};
+use crate::{DisplayDriver, command};
 
 /// Hx1230Driver implementation that uses a chip select CS pin and a SPI
 /// interface to communicate with the display
@@ -20,6 +18,17 @@ where SPI: spi::Write<u8>, CS: OutputPin {
     /// block exclusive access to CS and SPI interfaces.
     pub fn new(spi: &'a mut SPI, cs: &'a mut CS) -> Self {
         Self { spi, cs, }
+    }
+
+    /// Send the display initialization sequence
+    pub fn initialize<D>(
+        &mut self,
+        delay: &mut D
+    ) -> Result<(), ()>
+    where D: DelayUs<u16> + DelayMs<u16> {
+        self.send_commands(&[command::reset()])?;
+        delay.delay_us(100_u16);
+        self.send_commands(command::init_sequence())
     }
 
     /// Write large data block containing multiples of 64 bits

@@ -31,7 +31,10 @@ pub trait DisplayDriver {
     }
 }
 
-/// Trait representing a buffer of display pixel data
+/// Trait representing a buffer of 1-bit display pixel data.
+///
+/// Each buffer line represents data of 8 pixel lines on the display,
+/// each byte of the line represents data of a vertical 8-pixel column
 pub trait DisplayBuffer {
     /// Display width in pixels
     fn width(&self) -> usize;
@@ -40,9 +43,39 @@ pub trait DisplayBuffer {
     fn line_count(&self) -> usize;
 
     /// Line of pixel data, each byte represents one column of 8 pixel lines
+    ///
+    /// # Arguments
+    /// * `y` - coordinate of a frame buffer line
     fn get_line(&self, y: usize) -> Option<&[u8]>;
 
     /// A mutable slice of one line of pixel data,
     /// each byte represents one column of 8 pixel lines
+    ///
+    /// # Arguments
+    /// * `y` - coordinate of a frame buffer line
     fn get_line_mut(&mut self, y: usize) -> Option<&mut [u8]>;
+
+    /// Set all bytes of display buffer with the specified value
+    ///
+    /// # Arguments
+    /// * `value` - byte value to fill frame buffer with (0x00 clears all pixels,
+    ///             0xff sets all pixels of the display)
+    fn clear_buffer(&mut self, value: u8) {
+        for y in 0..self.line_count() {
+            self.clear_line(y, value)
+        }
+    }
+
+    /// Set all bytes of the specified display buffer line `y` with the
+    /// specified `value`
+    ///
+    /// # Arguments
+    /// * `y` - coordinate of a frame buffer line
+    /// * `value` - byte value to fill frame buffer with (0x00 clears all pixels,
+    ///             0xff sets all pixels of the display)
+    fn clear_line(&mut self, y: usize, value: u8) {
+        if let Some(line) = self.get_line_mut(y) {
+            line.iter_mut().for_each(|pixel| *pixel = value);
+        }
+    }
 }
